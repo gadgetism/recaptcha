@@ -10,7 +10,7 @@ A Captcha is a type of challenge-response test used in computing to ensure that 
 
 h2. Features
 
-* 5 minutes integration guaranteed
+* 2 minutes integration guaranteed
 * Industry standard Captcha engine [reCaptcha](http://www.google.com/recaptcha)
 * Automatically detects language preference from the "Play Framework":http://www.playframework.org
 * Customizable theme, tabindex and language
@@ -27,27 +27,22 @@ The modules requires the recapctha public/private key for your domain.
 
 h2. Installation
 
-There are two ways to deploy this module.
-
-# You can download the zip and unpack it in your play/module folder.
-# or, You can simply run *'play install recaptcha-0.9'* and let Play do all the job for you!
-
+# run *'play install recaptcha'* and let Play! install the module for you
+# open your application **conf/application.conf** and add
+## module.recaptcha=${play.path}/modules/recaptcha-0.9
+## ugot.recaptcha.privateKey=YOUR_RECAPTCHA_PRIVATE_KEY
+## ugot.recaptcha.publicKey=YOUR_RECAPTCHA_PUBLIC_KEY
 
 h2. How to Use
 
+Well it's kind of easy, the module offers two integration points:
 
-Well it's kind of easy.
-First, add this line in your **conf/application.conf**
-
-<pre>
-	module.recaptcha=${play.path}/modules/recaptcha-0.9
-</pre>
-
-Now the module offers two integration points: one to display the captcha, the other to validate it.
+# a tag to render the captcha: #{ugot.recaptcha /}
+# an annotation to validate the result: @Recaptcha
 
 h4. Generating the captcha
 
-Play being an MVC framework, we need to define a action in the controller and its associated page.
+Play being an MVC framework, we need to define an action in the controller and its associated page.
 Edit file **app/controller/Application.java** as follows:
 
 <pre>
@@ -65,11 +60,8 @@ Create a file `app/view/Application/register.html`
  #{set title:'Test reCaptcha' /}
 	#{form @save()} 
         your-other-form-stuff 
-        <p>        
-             #{crionics.recaptcha publicKey:"YOUR_PUBLIC_KEY", privateKey:"YOUR_PRIVATE_KEY", theme:"red", tabindex:"2"/}  
-            <br /> 
-            <input type="submit" value="Register me, I am human" /> 
-        </p>
+        <p>#{ugot.recaptcha theme:"red", tabindex:"2"/}</p>
+        <p><input type="submit" value="Register me, I am human" /></p>
 	#{/form}
 </pre>
 
@@ -78,25 +70,23 @@ h4. Validating the captcha
 Edit file *app/controller/Application.java* and add the following:
 
 <pre>
-	import com.crionics.recaptcha.Recaptcha;
+	import ugot.recaptcha.Recaptcha;
 
 	public class Application extends Controller {
-		public static void save() {
+		
+		public static void save(@Recaptcha) {
 
-		// ... Do some other form validation...
-        	boolean status = Recaptcha.checkAnswer("YOUR_PRIVATE_K", request, params);
+			// note the annotation above, it will automatically validate the captcha
+	 		if(validation.hasErrors()) {
+       			params.flash(); // add http parameters to the flash scope
+       			validation.keep(); // keep the errors for the next request
+       			register();
+   			}
 
-        	if (status) {
-        	    System.out.println("Captcha answer was entered correctly!");
-        	} else {
-            	System.out.println("Captcha answer is wrong");
-            	register();
-        	}
+    		// do some other processing
 		}
     }
 </pre>
-
-
 
 h4. Testing the captcha
 
@@ -106,10 +96,8 @@ Done!
 
 h2. Tag parameters
 
-The *crionics.recaptcha* tag takes the following parameters
+The *ugot.recaptcha* tag takes the following parameters
 
-*publicKey*: Mandatory field<br/>
-*privateKey*: Mandatory field<br/>
 *theme*: The theme to use. Possible values are:red (default), white, blackglass, clean<br/>
 *tabindex*: Sets a tabindex for the reCAPTCHA text box. If other elements in the form use a tabindex, this should be set so that navigation is easier for the user<br/>
 *lang*: A two character country code. By default the module will ask Play to provide the negotiated language. possible values are: en,nl,fr,de,pt,ru,es,tr
@@ -118,4 +106,5 @@ See the "reCaptcha documentation":http://code.google.com/apis/recaptcha/docs/cus
 
 h2. Credits
 
-This module is based on the "Recaptcha java library":http://code.google.com/p/recaptcha/downloads/list?q=label:java-Latest
+This module is based on the "Recaptcha java library":http://code.google.com/p/recaptcha/downloads/list?q=label:java-Latest.
+Author: Olivier Refalo

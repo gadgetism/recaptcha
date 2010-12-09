@@ -2,4 +2,4 @@
 # You can specialize this file for each language.
 # For exemple, for french create a messages.fr file
 
-#recaptcha.name=recaptcha
+validation.recaptcha=The visual validation didn't success

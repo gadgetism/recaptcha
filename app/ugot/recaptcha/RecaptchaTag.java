@@ -1,4 +1,4 @@
-package com.crionics.recaptcha;
+package ugot.recaptcha;
 
 import groovy.lang.Closure;
 
@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import net.tanesha.recaptcha.ReCaptchaFactory;
+import play.Play;
 import play.exceptions.TagInternalException;
 import play.exceptions.TemplateExecutionException;
 import play.i18n.Lang;
@@ -14,23 +15,27 @@ import play.templates.FastTags;
 import play.templates.GroovyTemplate.ExecutableTemplate;
 
 /**
- * How to use: #{crionics.recaptcha publicKey:"YOUR_RECAPTCHA_PUBLIC_KEY",
+ * How to use: #{ugot.recaptcha publicKey:"YOUR_RECAPTCHA_PUBLIC_KEY",
  * privateKey:"YOUR_RECAPTCHA_PRIVATE_KEY" /}
  * 
  * @author Olivier Refalo
  */
-@FastTags.Namespace("crionics")
+@FastTags.Namespace("ugot")
 public class RecaptchaTag extends FastTags {
-    private static final String ERROR_MSG = "Please provide a valid public and/or private keys";
+
+    private static final String ERROR_MSG = "Please define valid ugot.recaptcha.publicKey and ugot.recaptcha.privateKey in application.conf";
     private static final String[] SUPPORTED_LANG = { "en", "nl", "fr", "de", "pt", "ru", "es", "tr" };
 
     public static void _recaptcha(Map<?, ?> args, Closure body, PrintWriter out, ExecutableTemplate template, int fromLine)
     {
 
-	String publickey = (String) args.get("publicKey");
-	String privatekey = (String) args.get("privateKey");
+	String publickey = Play.configuration.getProperty("ugot.recaptcha.publicKey", "YOUR_RECAPTCHA_PUBLIC_KEY");
+	String privatekey = Play.configuration.getProperty("ugot.recaptcha.privateKey",
+		RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY);
 
-	if (publickey == null || privatekey == null || publickey.trim().length() == 0 || privatekey.trim().length() == 0)
+	if (publickey == null || privatekey == null || publickey.trim().length() == 0 || privatekey.trim().length() == 0
+		|| "YOUR_RECAPTCHA_PUBLIC_KEY".equals(publickey)
+		|| RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey))
 	{
 	    // Waiting on a way to access template.template bug:
 	    // http://play.lighthouseapp.com/projects/57987/tickets/398-executabletemplatetemplate-should-be-made-public#ticket-398-1
