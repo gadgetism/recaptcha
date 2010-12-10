@@ -29,9 +29,11 @@ h2. Installation
 
 # run *'play install recaptcha'* and let Play! install the module for you
 # open your application **conf/application.conf** and add
-## module.recaptcha=${play.path}/modules/recaptcha-0.9
+## module.recaptcha=${play.path}/modules/recaptcha-{version}
 ## ugot.recaptcha.privateKey=YOUR_RECAPTCHA_PRIVATE_KEY
 ## ugot.recaptcha.publicKey=YOUR_RECAPTCHA_PUBLIC_KEY
+
+Make sure to replace {version} and KEYS with their appropriate values
 
 h2. How to Use
 
