@@ -57,7 +57,7 @@ Edit file **app/controller/Application.java** as follows:
 
 Create a file `app/view/Application/register.html`
 
-<pre>
+bc.
  #{extends 'main.html' /}
  #{set title:'Test reCaptcha' /}
    #{form @save()} 
@@ -72,7 +72,7 @@ Create a file `app/view/Application/register.html`
      #{/ifErrors}
      &lt;p>&lt;input type="submit" value="Register me, I am human" />&lt;/p>
    #{/form}
-</pre>
+
 
 h4. Validating the captcha
 
