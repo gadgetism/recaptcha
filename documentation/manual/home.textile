@@ -57,47 +57,47 @@ Edit file **app/controller/Application.java** as follows:
 
 Create a file `app/view/Application/register.html`
 
-<code>
+<pre>
  #{extends 'main.html' /}
  #{set title:'Test reCaptcha' /}
    #{form @save()} 
-        Your form data
-        <p>#{ugot.recaptcha theme:"red", tabindex:"2"/}</p>
-        #{ifErrors}
-			<ul>
-			#{errors}
-			    <li>${error}</li>
-			#{/errors}
-			</ul>
-		#{/ifErrors}
-        <p><input type="submit" value="Register me, I am human" /></p>
+     Your form data
+     &lt;p>#{ugot.recaptcha theme:"red", tabindex:"2"/}&lt;/p>
+     #{ifErrors}
+       &lt;ul>
+         #{errors}
+            &lt;li>${error}&lt;/li>
+         #{/errors}
+       &lt;/ul>
+     #{/ifErrors}
+     &lt;p>&lt;input type="submit" value="Register me, I am human" />&lt;/p>
    #{/form}
-</code>
+</pre>
 
 h4. Validating the captcha
 
 Edit file *app/controller/Application.java* and add the following:
 
 <pre>
-	import ugot.recaptcha.Recaptcha;
+import ugot.recaptcha.Recaptcha;
 
-	public class Application extends Controller {
-		
-		public static void save(@Recaptcha String captcha) {
+ public class Application extends Controller {
+        
+  public static void save(@Recaptcha String captcha) {
 
-	 		if(validation.hasErrors()) {
-       			System.out.println("ERRORS found - invalid captcha");
-					params.flash();
-       				validation.keep();
-   			}
-			else {
-				System.out.println("There are no errors, the catcha was validated");
-			}
-			
-			// no matter what, redisplay the same page
-			register();
-		}
-    }
+     if(validation.hasErrors()) {
+        System.out.println("ERRORS found - invalid captcha");
+        params.flash();
+        validation.keep();
+      }
+      else {
+        System.out.println("There are no errors, the catcha was validated");
+      }
+            
+      // no matter what, redisplay the same page
+      register();
+   }
+ }
 </pre>
 
 h4. Testing the captcha
