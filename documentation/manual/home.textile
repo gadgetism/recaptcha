@@ -61,8 +61,15 @@ Create a file `app/view/Application/register.html`
  #{extends 'main.html' /}
  #{set title:'Test reCaptcha' /}
 	#{form @save()} 
-        your-other-form-stuff 
+        Your form data
         <p>#{ugot.recaptcha theme:"red", tabindex:"2"/}</p>
+        #{ifErrors}
+			<ul>
+			#{errors}
+			    <li>${error}</li>
+			#{/errors}
+			</ul>
+		#{/ifErrors}
         <p><input type="submit" value="Register me, I am human" /></p>
 	#{/form}
 </pre>
@@ -78,14 +85,17 @@ Edit file *app/controller/Application.java* and add the following:
 		
 		public static void save(@Recaptcha String captcha) {
 
-			// note the annotation above, it will automatically validate the captcha
 	 		if(validation.hasErrors()) {
-       			params.flash(); // add http parameters to the flash scope
-       			validation.keep(); // keep the errors for the next request
-       			register();
+       			System.out.println("ERRORS found - invalid captcha");
+					params.flash();
+       				validation.keep();
    			}
-
-    		// do some other processing
+			else {
+				System.out.println("There are no errors, the catcha was validated");
+			}
+			
+			// no matter what, redisplay the same page
+			register();
 		}
     }
 </pre>
