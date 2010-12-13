@@ -1,6 +1,6 @@
 h1. Recaptcha module for Play!
 
-Integrate challenge-response "reCaptcha":http://www.google.com/recaptcha tests in 5 minutes.
+Integrate challenge-response "reCaptcha":http://www.google.com/recaptcha tests in 2 minutes.
 
 h2. What is a Captcha?
 
@@ -76,7 +76,7 @@ Edit file *app/controller/Application.java* and add the following:
 
 	public class Application extends Controller {
 		
-		public static void save(@Recaptcha) {
+		public static void save(@Recaptcha String captcha) {
 
 			// note the annotation above, it will automatically validate the captcha
 	 		if(validation.hasErrors()) {
