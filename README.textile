@@ -47,31 +47,35 @@ h4. Generating the captcha
 Play being an MVC framework, we need to define an action in the controller and its associated page.
 Edit file **app/controller/Application.java** as follows:
 
-<pre>
+bc.
 	public class Application extends Controller {
-		public static void register() {
+		public static void index() {
 			render();
 		}
 	}
-</pre>
 
-Create a file `app/view/Application/register.html`
+
+Create a file `app/view/Application/index.html`
 
 bc.
- #{extends 'main.html' /}
- #{set title:'Test reCaptcha' /}
-   #{form @save()} 
-     Your form data
-     &lt;p>#{ugot.recaptcha theme:"red", tabindex:"2"/}&lt;/p>
-     #{ifErrors}
-       &lt;ul>
-         #{errors}
-            &lt;li>${error}&lt;/li>
-         #{/errors}
-       &lt;/ul>
-     #{/ifErrors}
-     &lt;p>&lt;input type="submit" value="Register me, I am human" />&lt;/p>
-   #{/form}
+#{extends 'main.html' /}
+#{set title:'Test reCaptcha' /}
+    #{form @save()} My sample captcha!
+		<p>
+			#{ugot.recaptcha theme:"red", tabindex:1/}
+		</p>
+		#{ifError 'recaptcha'}
+		<ul>
+			<li style="color:red">
+			#{error 'recaptcha'/}
+			</li>
+		</ul>
+		#{/ifError}
+		<p>
+			<input type="submit" value="Register"/>
+		</p>
+		<p>
+#{/form}
 
 
 h4. Validating the captcha
@@ -83,11 +87,10 @@ import ugot.recaptcha.Recaptcha;
 
  public class Application extends Controller {
         
-  public static void save(@Recaptcha String captcha) {
+  public static void save(@Recaptcha String recaptcha) {
 
      if(validation.hasErrors()) {
         System.out.println("ERRORS found - invalid captcha");
-        params.flash();
         validation.keep();
       }
       else {
@@ -95,16 +98,16 @@ import ugot.recaptcha.Recaptcha;
       }
             
       // no matter what, redisplay the same page
-      register();
+      index();
    }
  }
 </pre>
 
 h4. Testing the captcha
 
-Start play and launch a browser to "http://localhost:9000/Application/register":http://localhost:9000/Application/register<br/>
+Start play and launch a browser to "http://localhost:9000/":http://localhost:9000/<br/>
 Done!
-
+You may find the sample app bundled with the module
 
 h2. Tag parameters
 

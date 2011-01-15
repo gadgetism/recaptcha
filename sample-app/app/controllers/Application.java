@@ -15,21 +15,19 @@ public class Application extends Controller {
         render();
     }
 
+   public static void good() {
+        render();
+    }
     public static void save(@Recaptcha String recaptcha) {
 
      if(validation.hasErrors()) {
-        System.out.println("ERRORS found - invalid recaptcha");
-        params.flash();
         validation.keep();
+ 		index();
       }
       else {
-        System.out.println("There are no errors, the catcha was validated");
+	    // validation is fine, let the use know
+        good();
       }
-            
-      // no matter what, redisplay the same page
-      index();
+     
    }
-
-
-
 }
