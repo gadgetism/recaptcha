@@ -1,5 +1,1 @@
-# Default recaptcha messages
-# You can specialize this file for each language.
-# For exemple, for french create a messages.fr file
-
-validation.recaptcha=The visual validation didn't success
+validation.recaptcha=The visual validation did not succeed, please try again

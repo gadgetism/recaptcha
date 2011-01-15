@@ -15,10 +15,10 @@ public class Application extends Controller {
         render();
     }
 
-    public static void save(@Recaptcha String captcha) {
+    public static void save(@Recaptcha String recaptcha) {
 
      if(validation.hasErrors()) {
-        System.out.println("ERRORS found - invalid captcha");
+        System.out.println("ERRORS found - invalid recaptcha");
         params.flash();
         validation.keep();
       }

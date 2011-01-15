@@ -5,14 +5,9 @@
 			#{ugot.recaptcha theme:"red", tabindex:1/}
 		</p>
 		
-		
-		#{errors}
-			<p style="color:red">${error}</p>
-		#{/errors}
-		
 		#{ifError 'recaptcha'}
 		<ul>
-			<li style="list-style: none">
+			<li style="color:red">
 			#{error 'recaptcha'/}
 			</li>
 		</ul>

@@ -12,9 +12,9 @@ public class RecaptchaCheck extends AbstractAnnotationCheck<Recaptcha> {
     final static String mes = "validation.recaptcha";
 
     @Override
-    public void configure(Recaptcha phone)
+    public void configure(Recaptcha recaptcha)
     {
-	setMessage(phone.message());
+	setMessage(recaptcha.message());
     }
 
     @Override
