@@ -15,69 +15,66 @@ import play.templates.FastTags;
 import play.templates.GroovyTemplate.ExecutableTemplate;
 
 /**
- * How to use: #{ugot.recaptcha publicKey:"YOUR_RECAPTCHA_PUBLIC_KEY",
- * privateKey:"YOUR_RECAPTCHA_PRIVATE_KEY" /}
+ * How to use: #{ugot.recaptcha /}
  * 
  * @author Olivier Refalo
  */
 @FastTags.Namespace("ugot")
 public class RecaptchaTag extends FastTags {
 
-    private static final String ERROR_MSG = "Please define valid ugot.recaptcha.publicKey and ugot.recaptcha.privateKey in application.conf";
-    private static final String[] SUPPORTED_LANG = { "en", "nl", "fr", "de", "pt", "ru", "es", "tr" };
+	private static final String ERROR_MSG = "Please define valid ugot.recaptcha.publicKey and ugot.recaptcha.privateKey in application.conf";
+	private static final String[] SUPPORTED_LANG = { "en", "nl", "fr", "de", "pt", "ru", "es", "tr" };
 
-    public static void _recaptcha(Map<?, ?> args, Closure body, PrintWriter out, ExecutableTemplate template, int fromLine)
-    {
+	public static void _recaptcha(Map<?, ?> args, Closure body, PrintWriter out, ExecutableTemplate template, int fromLine) {
 
-	String publickey = Play.configuration.getProperty("ugot.recaptcha.publicKey", "YOUR_RECAPTCHA_PUBLIC_KEY");
-	String privatekey = Play.configuration.getProperty("ugot.recaptcha.privateKey",
-		RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY);
+		String publickey = Play.configuration.getProperty("ugot.recaptcha.publicKey", "YOUR_RECAPTCHA_PUBLIC_KEY");
+		String privatekey = Play.configuration.getProperty("ugot.recaptcha.privateKey",
+				RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY);
 
-	if (publickey == null || privatekey == null || publickey.trim().length() == 0 || privatekey.trim().length() == 0
-		|| "YOUR_RECAPTCHA_PUBLIC_KEY".equals(publickey)
-		|| RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey))
-	{
-	    // Waiting on a way to access template.template bug:
-	    // http://play.lighthouseapp.com/projects/57987/tickets/398-executabletemplatetemplate-should-be-made-public#ticket-398-1
-	    // throw new TemplateExecutionException(template.template, fromLine,
-	    // ERROR_MSG, new TagInternalException(ERROR_MSG));
-	    throw new TemplateExecutionException(null, fromLine, ERROR_MSG, new TagInternalException(ERROR_MSG));
-	} else
-	{
+		if (publickey == null || privatekey == null || publickey.trim().length() == 0 || privatekey.trim().length() == 0
+				|| "YOUR_RECAPTCHA_PUBLIC_KEY".equals(publickey)
+				|| RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey)) {
+			// Waiting on a way to access template.template bug:
+			// http://play.lighthouseapp.com/projects/57987/tickets/398-executabletemplatetemplate-should-be-made-public#ticket-398-1
+			// throw new TemplateExecutionException(template.template, fromLine,
+			// ERROR_MSG, new TagInternalException(ERROR_MSG));
+			throw new TemplateExecutionException(null, fromLine, ERROR_MSG, new TagInternalException(ERROR_MSG));
+		} else {
 
-	    Properties props = new Properties();
+			Properties props = new Properties();
 
-	    String tabindex = (String) args.get("tabindex");
-	    if (tabindex != null)
-		props.put("tabindex", tabindex);
+			Object o = args.get("tabindex");
+			if (o != null) {
+				String tabindex = o.toString();
+				if (tabindex != null)
+					props.put("tabindex", tabindex);
+			}
 
-	    String theme = (String) args.get("theme");
-	    if (theme != null)
-		props.put("theme", theme);
+			String theme = (String) args.get("theme");
+			if (theme != null)
+				props.put("theme", theme);
 
-	    String lang = (String) args.get("lang");
-	    if (lang == null)
-	    {
-		// figure what language the application use and see if recaptcha
-		// supports it, defaults to en
-		lang = Lang.get();
-		if (lang == null || lang.trim().length() == 0 || !isLangSupported(lang))
-		    lang = "en";
-	    }
-	    props.put("lang", lang);
+			String lang = (String) args.get("lang");
+			if (lang == null) {
+				// figure what language the application use and see if recaptcha
+				// supports it, defaults to en
+				lang = Lang.get();
+				if (lang == null || lang.trim().length() == 0 || !isLangSupported(lang))
+					lang = "en";
+			}
+			props.put("lang", lang);
 
-	    String captcha = ReCaptchaFactory.newReCaptcha(publickey, privatekey, false).createRecaptchaHtml(null, props);
-	    out.print(captcha);
+			String captcha = ReCaptchaFactory.newReCaptcha(publickey, privatekey, false).createRecaptchaHtml(null, props);
+			out.print(captcha);
+		}
+
 	}
 
-    }
-
-    private static boolean isLangSupported(String lang)
-    {
-	for (int i = SUPPORTED_LANG.length; --i >= 0;)
-	    if (SUPPORTED_LANG[i].equals(lang))
-		return true;
-	return false;
-    }
+	private static boolean isLangSupported(String lang) {
+		for (int i = SUPPORTED_LANG.length; --i >= 0;)
+			if (SUPPORTED_LANG[i].equals(lang))
+				return true;
+		return false;
+	}
 
 }

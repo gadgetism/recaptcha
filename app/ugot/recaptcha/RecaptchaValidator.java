@@ -8,28 +8,25 @@ import play.mvc.Scope.Params;
 
 public class RecaptchaValidator {
 
-    public static final String YOUR_RECAPTCHA_PRIVATE_KEY = "YOUR_RECAPTCHA_PRIVATE_KEY";
+	public static final String YOUR_RECAPTCHA_PRIVATE_KEY = "YOUR_RECAPTCHA_PRIVATE_KEY";
 
-    private RecaptchaValidator()
-    {
+	private RecaptchaValidator() {
+	}
 
-    }
+	public static boolean checkAnswer(Request request, Params params) {
 
-    public static boolean checkAnswer(Request request, Params params)
-    {
+		String remoteAddr = request.remoteAddress;
 
-	String remoteAddr = request.remoteAddress;
+		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+		String privatekey = Play.configuration.getProperty("ugot.recaptcha.privateKey", YOUR_RECAPTCHA_PRIVATE_KEY);
+		if (privatekey == null || privatekey.trim().length() == 0 || YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey))
+			return false;
 
-	ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-	String privatekey = Play.configuration.getProperty("ugot.recaptcha.privateKey", YOUR_RECAPTCHA_PRIVATE_KEY);
-	if (privatekey == null || privatekey.trim().length() == 0 || YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey))
-	    return false;
+		reCaptcha.setPrivateKey(privatekey);
+		String challenge = params.get("recaptcha_challenge_field");
+		String uresponse = params.get("recaptcha_response_field");
 
-	reCaptcha.setPrivateKey(privatekey);
-	String challenge = params.get("recaptcha_challenge_field");
-	String uresponse = params.get("recaptcha_response_field");
-
-	ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
-	return reCaptchaResponse.isValid();
-    }
+		ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
+		return reCaptchaResponse.isValid();
+	}
 }

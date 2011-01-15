@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 import net.sf.oval.configuration.annotation.Constraint;
 
 /**
- * Message key: validation.recaptcha
- * $1: field name
+ * Message key: validation.recaptcha $1: field name
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.PARAMETER })

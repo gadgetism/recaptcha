@@ -21,7 +21,7 @@ public class RecaptchaCheck extends AbstractAnnotationCheck<Recaptcha> {
     public boolean isSatisfied(Object validatedObject, Object value, OValContext context, Validator validator)
 	    throws OValException
     {
-	return RecaptchaValidator.checkAnswer(Request.current(), Params.current());
+		return RecaptchaValidator.checkAnswer(Request.current(), Params.current());
     }
 
 }

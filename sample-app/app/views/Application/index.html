@@ -1,0 +1,24 @@
+#{extends 'main.html' /}
+#{set title:'Test reCaptcha' /}
+    #{form @save()} My sample captcha!
+		<p>
+			#{ugot.recaptcha theme:"red", tabindex:1/}
+		</p>
+		
+		
+		#{errors}
+			<p style="color:red">${error}</p>
+		#{/errors}
+		
+		#{ifError 'recaptcha'}
+		<ul>
+			<li style="list-style: none">
+			#{error 'recaptcha'/}
+			</li>
+		</ul>
+		#{/ifError}
+		<p>
+			<input type="submit" value="Register"/>
+		</p>
+		<p>
+	#{/form}
