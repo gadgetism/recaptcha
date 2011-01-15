@@ -1,3 +1,4 @@
 /eclipse/
 /dist/
 *.class
+/sample-app/tmp/*
