@@ -34,7 +34,7 @@ public class RecaptchaTag extends FastTags {
 		if (publickey == null || privatekey == null || publickey.trim().length() == 0 || privatekey.trim().length() == 0
 				|| "YOUR_RECAPTCHA_PUBLIC_KEY".equals(publickey)
 				|| RecaptchaValidator.YOUR_RECAPTCHA_PRIVATE_KEY.equals(privatekey)) {
-			// Waiting on a way to access template.template bug:
+			// Waiting on a way to access template.template bug (will come with play 1.2):
 			// http://play.lighthouseapp.com/projects/57987/tickets/398-executabletemplatetemplate-should-be-made-public#ticket-398-1
 			// throw new TemplateExecutionException(template.template, fromLine,
 			// ERROR_MSG, new TagInternalException(ERROR_MSG));

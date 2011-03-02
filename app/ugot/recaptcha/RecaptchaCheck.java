@@ -14,7 +14,7 @@ public class RecaptchaCheck extends AbstractAnnotationCheck<Recaptcha> {
     @Override
     public void configure(Recaptcha recaptcha)
     {
-	setMessage(recaptcha.message());
+		setMessage(recaptcha.message());
     }
 
     @Override
